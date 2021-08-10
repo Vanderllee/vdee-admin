@@ -7,8 +7,8 @@ export default function AsideMenu() {
         <aside>
             <ul>
                 <MenuItem url='/' title='Início' icone={ HomeIcon }/>
-                <MenuItem url='/configuracoes' title='Configurações' icone={ AdjustmentsIcon }/>
-                <MenuItem url='/notificaçoes' title='Notificações' icone={ BellIcon }/>
+                <MenuItem url='/ajustes' title='Ajustes' icone={ AdjustmentsIcon }/>
+                <MenuItem url='/notificacoes' title='Notificações' icone={ BellIcon }/>
             </ul>
 
         </aside>
