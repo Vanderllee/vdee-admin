@@ -8,7 +8,7 @@ type MenuItemProps ={
     url?: string;
     icone: ReactNode;
     className?: string;
-    onClick?: (event: any) => void;
+    onClick?: () => void;
 }
 
 export default function MenuItem({ title, url, icone, onClick, className }: MenuItemProps) {
