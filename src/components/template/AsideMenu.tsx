@@ -27,7 +27,7 @@ export default function AsideMenu() {
                 <MenuItem 
                     title='Sair' 
                     icone={ LogoutItem }
-                    onClick={() => console.log('teste de logout')}
+                    onClick={() => alert('Logout!!')}
 
                     className={`
                         text-red-600 dark:text-red-400
