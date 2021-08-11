@@ -5,26 +5,45 @@ import { ReactNode } from "react"
 
 type MenuItemProps ={
     title: string;
-    url: string;
+    url?: string;
     icone: ReactNode;
+    className?: string;
+    onClick?: (event: any) => void;
 }
 
-export default function MenuItem({ title, url, icone }: MenuItemProps) {
-    return (
-        <li className={`hover:bg-gray-100`}>
+export default function MenuItem({ title, url, icone, onClick, className }: MenuItemProps) {
 
-            <Link href={ url }>
-                <a className={`
+    function linkRender() {
+        return (
+            <a className={`
                     flex flex-col justify-center items-center
-                    h-20 w-20
-                `}>
+                    h-20 w-20 text-gray-600
+                    ${className}
+            `}>
                     { icone }
                     <span className={`
-                        text-xs font-light text-gray-600
+                        text-xs font-light 
                     `}>{ title }</span>
                 </a>
+        )
+    }
+
+    return (
+        <li onClick={onClick} className={`hover:bg-gray-100 cursor-pointer`}>
+
+            {
+                url 
+                ? 
+                    (
+                        <Link href={ url }>
                 
-            </Link>
+                            { linkRender() }
+                    
+                        </Link>
+                    ) 
+
+                : ( linkRender() )
+            }
         </li>
     )
 }
