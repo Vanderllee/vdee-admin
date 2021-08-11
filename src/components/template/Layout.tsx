@@ -14,7 +14,7 @@ type LayoutProps = {
 
 export default function Layout({ title, subtitle, children }: LayoutProps) {
     return (
-        <div className={`  flex h-screen w-screen `}>
+        <div className={` dark flex h-screen w-screen `}>
             <AsideMenu />
             <div className={`
                 flex flex-col w-full p-7 

@@ -17,7 +17,7 @@ export default function MenuItem({ title, url, icone, onClick, className }: Menu
         return (
             <a className={`
                     flex flex-col justify-center items-center
-                    h-20 w-20 text-gray-600
+                    h-20 w-20 text-gray-600 dark:text-gray-200
                     ${className}
             `}>
                     { icone }
@@ -29,7 +29,13 @@ export default function MenuItem({ title, url, icone, onClick, className }: Menu
     }
 
     return (
-        <li onClick={onClick} className={`hover:bg-gray-100 cursor-pointer`}>
+        <li 
+            onClick={onClick} 
+            className={`
+                hover:bg-gray-100 
+                cursor-pointer
+                dark:hover:bg-gray-800
+            `}>
 
             {
                 url 
