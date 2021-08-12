@@ -1,4 +1,4 @@
-import { Children, createContext, ReactNode } from "react";
+import { createContext, ReactNode } from "react";
 
 type CreateContextProps = {
     name: string;
@@ -26,4 +26,3 @@ export function AppProvider({ children }: AppProviderProps ) {
 
 export default AppContext;
 
-export const AppConsumer = AppContext.Consumer
