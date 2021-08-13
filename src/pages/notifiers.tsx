@@ -3,13 +3,12 @@ import useAppData from "../data/hook/useAppData";
 
 export default function Notificacoes() {
 
-    const dataContext = useAppData()
-
+    //const dataContext = useAppData()
+    const { handleTheme } = useAppData();
   return (
    <Layout title={'Notificações'} subtitle={'Página de notificações'}>
      
-
-      <h1>{dataContext.name}</h1>
+     <button onClick={handleTheme}> trocar de Tema! </button>
 
    </Layout>
   )

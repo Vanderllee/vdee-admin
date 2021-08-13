@@ -1,7 +1,10 @@
-import { createContext, ReactNode } from "react";
+import { createContext, ReactNode, useState } from "react";
+
+type Theme = 'dark' | '';
 
 type CreateContextProps = {
-    name: string;
+    theme: Theme;
+    handleTheme: () => void;
 }
 
 type AppProviderProps = {
@@ -13,9 +16,17 @@ const AppContext = createContext({} as CreateContextProps);
 
 
 export function AppProvider({ children }: AppProviderProps ) {
+
+    const [theme, setTheme] = useState<Theme>('dark');
+
+    function handleTheme() {
+        setTheme(theme === '' ? 'dark': '');
+    }
+
     return (
         <AppContext.Provider value={{
-            name: 'Teste contextAPI'
+            theme,
+            handleTheme
         }}>
 
             { children }
