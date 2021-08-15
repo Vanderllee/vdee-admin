@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState } from "react";
 import AuthInput from "../components/auth/AuthInput";
+import { WarnIcon } from "../components/icons";
 
 
 
@@ -8,14 +9,23 @@ export default function Auth() {
 
     const [mode, setMode] = useState<'login' | 'signup'>('login');
 
+    const [error, setError] = useState(null);
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    function handleError(msg: string, timeSeconds = 5) {
+        setError(msg)
+        setTimeout(() => setError(null), timeSeconds * 1000 )
+    }
 
     function submit() {
         if (mode === 'login') {
             console.log('login')
+            
         } else {
             console.log('signup')
+           
         }
     }
 
@@ -25,10 +35,10 @@ export default function Auth() {
         <div className="flex  h-screen items-center justify-center">
 
             <div className=" hidden md:block md:w-1/2 lg:2/3">
-               <img 
-                src="https:source.unsplash.com/random" 
-                alt="Imagem da Tela de Autenticação" 
-                className="h-screen w-full object-cover"
+                <img
+                    src="https:source.unsplash.com/random"
+                    alt="Imagem da Tela de Autenticação"
+                    className="h-screen w-full object-cover"
                 />
             </div>
 
@@ -39,6 +49,23 @@ export default function Auth() {
             `}>
                     {mode === 'login' ? 'Entre com a sua conta' : 'Cadastra-se na Plataforma'}
                 </h1>
+
+
+                {
+                    error ? (
+                        <div className={`
+                            flex items-center
+                            bg-red-400 text-white py-3 my-2
+                            border border-red-700 rounded-lg
+                        `}>
+                            {WarnIcon(7)}
+                            <span className={`
+                            ml-3 text-sm
+                        `}>{ error }</span>
+                        </div>
+                    ) : (null)
+                }
+
 
                 <AuthInput
                     title="Email"
@@ -74,35 +101,35 @@ export default function Auth() {
                 </button>
 
                 {
-                    mode === 'login' 
-                    ? (
-                        <p className="mt-5">
-                            Novo na plataforma ?
-                            <a 
-                                className={`
+                    mode === 'login'
+                        ? (
+                            <p className="mt-5">
+                                Novo na plataforma ?
+                                <a
+                                    className={`
                                  text-blue-500 hover:text-blue-700 font-semibold
                                  cursor-pointer ml-1
                             `}
-                            onClick={() => setMode('signup')}
-                            >
-                                Crie uma conta Gratuitamente
-                            </a>
-                        </p>
-                    ) 
-                    : (
-                        <p className="mt-5">
-                        Já faz parte da plataforma ?
-                        <a 
-                            className={`
+                                    onClick={() => setMode('signup')}
+                                >
+                                    Crie uma conta Gratuitamente
+                                </a>
+                            </p>
+                        )
+                        : (
+                            <p className="mt-5">
+                                Já faz parte da plataforma ?
+                                <a
+                                    className={`
                              text-blue-500 hover:text-blue-700 font-semibold
                              cursor-pointer ml-1
                         `}
-                        onClick={() => setMode('login')}
-                        >
-                            Entre com suas credenciais
-                        </a>
-                    </p>
-                    )
+                                    onClick={() => setMode('login')}
+                                >
+                                    Entre com suas credenciais
+                                </a>
+                            </p>
+                        )
                 }
             </div>
         </div>
