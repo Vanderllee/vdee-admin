@@ -12,13 +12,11 @@ type AuthContextPro = {
 }
 
 
-/*type FirebaseUserProps = {
-    firebaseUser: firebase.User;
-}*/
+
 
 const AuthContext = createContext<AuthContextPro>({});
 
-   /*async function firebaseUser({ firebaseUser } : FirebaseUserProps) {
+   async function firebaseUser(firebaseUser : firebase.User) {
 
         const token = await firebaseUser.getIdToken()
        
@@ -28,16 +26,27 @@ const AuthContext = createContext<AuthContextPro>({});
             email: firebaseUser.email,
             token: token,
             provider: firebaseUser.providerData[0].providerId,
-            image: firebaseUser.photoURL
+            imageUrl: firebaseUser.photoURL
         }
-   } */
+   } 
 
 export function AuthProvider(props: AuthContextPro) {
 
     const [user, setUser ] = useState<User>(null);
 
     async function loginGoogle() {
-        route.push('/ajustes')
+        
+
+       const response= await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
+
+      if(response.user?.email) {
+        const userData = await firebaseUser(response.user);
+
+        setUser(userData);
+  
+        route.push('/');
+      }
+
     }
 
     return (
