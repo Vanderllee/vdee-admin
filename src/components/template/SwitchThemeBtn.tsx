@@ -9,12 +9,12 @@ export default function SwitchThmeBtn({ theme, switchTheme }: SwitchThmeBtnProps
 
     return theme === 'dark' ? (
         <div onClick={ switchTheme } className={`
-            hidden sm:flex items-center cursor-pointer
+            hidden lg:flex items-center cursor-pointer
 
              bg-gradient-to-r from-yellow-300 to-yellow-600
              p-1  rounded-full 
     
-             w-14 lg:w-24 h-8
+             w-12 lg:w-24 h-8
         `}>
             <div className={`
                 flex items-center justify-center
