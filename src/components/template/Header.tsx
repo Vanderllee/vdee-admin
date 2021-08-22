@@ -1,6 +1,7 @@
 import useAppData from '../../data/hook/useAppData';
-import SwitchThmeBtn from './SwitchThemeBtn';
+import SwitchThemeBtn from './SwitchThemeBtn';
 import Title from './Title';
+import UserAvatar from './UserAvatar';
 
 type HeaderProps = {
     title: string;
@@ -16,10 +17,14 @@ export default function Header({ title, subtitle }: HeaderProps) {
             <Title title={title} subtitle={subtitle}/>
 
             <div className={`
-                 flex flex-grow justify-end 
+                 flex flex-grow justify-end items-center
             `}>
-                <SwitchThmeBtn theme={ theme } switchTheme={ handleTheme }/>
+                <SwitchThemeBtn theme={ theme } switchTheme={ handleTheme }/>
+
+                <UserAvatar className=" ml-3"/>
             </div>
+
+            
         </div>
     )
 }
