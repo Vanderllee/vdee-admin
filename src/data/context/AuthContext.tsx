@@ -8,6 +8,7 @@ import route from 'next/router'
 type AuthContextPro = {
     user?: User;
     loginGoogle?: () => Promise<void>;
+    logout?: () => Promise<void>;
     children?: ReactNode
     
 }
@@ -43,7 +44,7 @@ const AuthContext = createContext<AuthContextPro>({} as AuthContextPro);
 
 export function AuthProvider(props: AuthContextPro) {
 
-    const [carregando, setCarregando ] = useState(true)
+    const [carregando, setCarregando ] = useState(true);
     const [user, setUser ] = useState<User>(null);
 
 
@@ -67,24 +68,44 @@ export function AuthProvider(props: AuthContextPro) {
 
     async function loginGoogle() {
         
-       const response= await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
+       try {
+        setCarregando(true)
+        const response= await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
 
         configSession(response.user)
   
         route.push('/');
+
+       } finally {
+        setCarregando(false)
+       }
       
 
     }
 
+    async function logout() {
+        try {
+            setCarregando(true);
+            await firebase.auth().signOut();
+            await configSession(null);
+
+        }finally {
+            setCarregando(false);
+        }
+    }
+
     useEffect(() => {
-       const cancel =  firebase.auth().onIdTokenChanged(configSession)
-       return () => cancel();
+       if(Cookies.get('vdee-admin-auth')) {
+        const cancel =  firebase.auth().onIdTokenChanged(configSession)
+        return () => cancel();
+       }
     }, [])
 
     return (
         <AuthContext.Provider value={{ 
             user,
-            loginGoogle 
+            loginGoogle,
+            logout, 
         }}>
             {
                 props.children

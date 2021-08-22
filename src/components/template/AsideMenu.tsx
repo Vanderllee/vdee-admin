@@ -1,9 +1,13 @@
+import useAuth from "../../data/hook/useAuth";
 import { AdjustmentsIcon, BellIcon, HomeIcon, LogoutItem} from "../icons";
 import Logo from "./Logo";
 import MenuItem from "./MenuItem";
 
 
 export default function AsideMenu() {
+
+    const { logout } = useAuth()
+
     return (
         <aside className={`
             flex flex-col
@@ -27,7 +31,7 @@ export default function AsideMenu() {
                 <MenuItem 
                     title='Sair' 
                     icone={ LogoutItem }
-                    onClick={() => alert('Logout!!')}
+                    onClick={ logout }
 
                     className={`
                         text-red-600 dark:text-red-400
