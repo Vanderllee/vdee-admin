@@ -1,5 +1,6 @@
-import { Children, createContext, ReactNode, useState } from 'react';
+import { Children, createContext, ReactNode, useEffect, useState } from 'react';
 import firebase from '../../firebase/config';
+import Cookies from 'js-cookie';
 import User from '../../model/User';
 import route from 'next/router'
 
@@ -12,11 +13,10 @@ type AuthContextPro = {
 }
 
 
+const AuthContext = createContext<AuthContextPro>({} as AuthContextPro);
 
-
-const AuthContext = createContext<AuthContextPro>({});
-
-   async function firebaseUser(firebaseUser : firebase.User) {
+    //recebe os dados do firebase e constroi o objeto usuario
+   async function firebaseUser(firebaseUser:firebase.User) {
 
         const token = await firebaseUser.getIdToken()
        
@@ -30,24 +30,56 @@ const AuthContext = createContext<AuthContextPro>({});
         }
    } 
 
+   //gerenciar o cookie
+   function handleCookie(value: string) {
+       if(value) {
+            Cookies.set('vdee-admin-auth', value, {expires: 7})
+       } else {
+            Cookies.remove('vdee-admin-auth')
+       }
+   }
+
+
+
 export function AuthProvider(props: AuthContextPro) {
 
+    const [carregando, setCarregando ] = useState(true)
     const [user, setUser ] = useState<User>(null);
+
+
+    //configurar sessão do cookie
+   async function configSession(userFirebase: firebase.User) {
+        if(userFirebase?.email) {
+            const user = await firebaseUser(userFirebase);
+            setUser(user);
+            handleCookie('true');
+            setCarregando(false)
+            
+            return user.email;
+
+        } else {
+            setUser(null);
+            handleCookie('false');
+            setCarregando(false);
+            return false;
+        }
+    }
 
     async function loginGoogle() {
         
-
        const response= await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
 
-      if(response.user?.email) {
-        const userData = await firebaseUser(response.user);
-
-        setUser(userData);
+        configSession(response.user)
   
         route.push('/');
-      }
+      
 
     }
+
+    useEffect(() => {
+       const cancel =  firebase.auth().onIdTokenChanged(configSession)
+       return () => cancel();
+    }, [])
 
     return (
         <AuthContext.Provider value={{ 
