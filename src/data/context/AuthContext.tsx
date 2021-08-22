@@ -7,9 +7,10 @@ import route from 'next/router'
 
 type AuthContextPro = {
     user?: User;
+    children?: ReactNode;
+    loading: boolean;
     loginGoogle?: () => Promise<void>;
     logout?: () => Promise<void>;
-    children?: ReactNode
     
 }
 
@@ -44,7 +45,7 @@ const AuthContext = createContext<AuthContextPro>({} as AuthContextPro);
 
 export function AuthProvider(props: AuthContextPro) {
 
-    const [carregando, setCarregando ] = useState(true);
+    const [loading, setLoading ] = useState(true);
     const [user, setUser ] = useState<User>(null);
 
 
@@ -54,14 +55,14 @@ export function AuthProvider(props: AuthContextPro) {
             const user = await firebaseUser(userFirebase);
             setUser(user);
             handleCookie('true');
-            setCarregando(false)
+            setLoading(false)
             
             return user.email;
 
         } else {
             setUser(null);
             handleCookie('false');
-            setCarregando(false);
+            setLoading(false);
             return false;
         }
     }
@@ -69,7 +70,7 @@ export function AuthProvider(props: AuthContextPro) {
     async function loginGoogle() {
         
        try {
-        setCarregando(true)
+        setLoading(true)
         const response= await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
 
         configSession(response.user)
@@ -77,7 +78,7 @@ export function AuthProvider(props: AuthContextPro) {
         route.push('/');
 
        } finally {
-        setCarregando(false)
+        setLoading(false)
        }
       
 
@@ -85,12 +86,12 @@ export function AuthProvider(props: AuthContextPro) {
 
     async function logout() {
         try {
-            setCarregando(true);
+            setLoading(true);
             await firebase.auth().signOut();
             await configSession(null);
 
         }finally {
-            setCarregando(false);
+            setLoading(false);
         }
     }
 
@@ -98,12 +99,15 @@ export function AuthProvider(props: AuthContextPro) {
        if(Cookies.get('vdee-admin-auth')) {
         const cancel =  firebase.auth().onIdTokenChanged(configSession)
         return () => cancel();
+       } else {
+           setLoading(false);
        }
     }, [])
 
     return (
         <AuthContext.Provider value={{ 
             user,
+            loading,
             loginGoogle,
             logout, 
         }}>

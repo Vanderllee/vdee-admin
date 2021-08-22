@@ -4,6 +4,7 @@ import Header from "./Header";
 import Content from "./Content";
 import AsideMenu from "./AsideMenu";
 import useAppData from "../../data/hook/useAppData";
+import ForcedAuth from "../auth/ForcedAuth";
 
 
 
@@ -15,21 +16,23 @@ type LayoutProps = {
 
 export default function Layout({ title, subtitle, children }: LayoutProps) {
 
-        const { theme } = useAppData();
+    const { theme } = useAppData();
 
     return (
-        <div className={` ${ theme } flex h-screen w-screen `}>
-            <AsideMenu />
-            <div className={`
+        <ForcedAuth>
+            <div className={` ${theme} flex h-screen w-screen `}>
+                <AsideMenu />
+                <div className={`
                 flex flex-col w-full p-7 
                 bg-gray-300 dark:bg-gray-800
 
             `}>
-                <Header title={title} subtitle={subtitle} />
-                <Content>
-                    {children}
-                </Content>
+                    <Header title={title} subtitle={subtitle} />
+                    <Content>
+                        {children}
+                    </Content>
+                </div>
             </div>
-        </div>
+        </ForcedAuth>
     )
 }
