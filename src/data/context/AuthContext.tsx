@@ -11,7 +11,14 @@ type AuthContextPro = {
     loading: boolean;
     loginGoogle?: () => Promise<void>;
     logout?: () => Promise<void>;
+    login?: ({email, password}:loginWithEmailPassword) => Promise<void>;
+    createUser?: ({email, password}:loginWithEmailPassword) => Promise<void>;
     
+}
+
+type loginWithEmailPassword = {
+    email: string;
+    password: string;
 }
 
 
@@ -67,13 +74,50 @@ export function AuthProvider(props: AuthContextPro) {
         }
     }
 
+    //login with email and password
+    async function login({ email, password }: loginWithEmailPassword ) {
+        
+        try {
+         setLoading(true)
+         const response= await firebase.auth().signInWithEmailAndPassword(email, password);
+ 
+            await configSession(response.user)
+   
+         route.push('/');
+ 
+        } finally {
+         setLoading(false)
+        }
+       
+ 
+    }
+
+    //cadastrar um usuario usando email/senha google
+    async function createUser({ email, password }: loginWithEmailPassword ) {
+        
+        try {
+            setLoading(true)
+            const response= await firebase.auth().createUserWithEmailAndPassword(email, password);
+    
+            await configSession(response.user)
+    
+            route.push('/');
+ 
+        } finally {
+         setLoading(false)
+        }
+       
+ 
+    }
+
+    //login with google
     async function loginGoogle() {
         
        try {
         setLoading(true)
         const response= await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
 
-        configSession(response.user)
+        await configSession(response.user)
   
         route.push('/');
 
@@ -110,6 +154,8 @@ export function AuthProvider(props: AuthContextPro) {
             loading,
             loginGoogle,
             logout, 
+            login,
+            createUser
         }}>
             {
                 props.children

@@ -8,7 +8,7 @@ import useAuth from "../data/hook/useAuth";
 
 export default function Auth() {
 
-    const { user, loginGoogle } = useAuth();
+    const { login, createUser, loginGoogle } = useAuth();
 
     const [mode, setMode] = useState<'login' | 'signup'>('login');
 
@@ -22,13 +22,19 @@ export default function Auth() {
         setTimeout(() => setError(null), timeSeconds * 1000 )
     }
 
-    function submit() {
-        if (mode === 'login') {
-            console.log('login')
-            
-        } else {
-            console.log('signup')
-           
+   async function submit() {
+        try {
+            if (mode === 'login') {
+
+                await login({ email, password })
+                
+            } else {
+                
+               await createUser({ email, password })
+               
+            }
+        }catch (error) {
+            handleError(error?.message ?? 'Erro inesperado!')
         }
     }
 
