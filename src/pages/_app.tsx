@@ -5,7 +5,7 @@ import { AuthProvider } from '../data/context/AuthContext';
 
 function MyApp({ Component, pageProps }) {
   return (
-    <AuthProvider>
+    <AuthProvider loading={false}>
       <AppProvider>
 
         <Component {...pageProps} />
